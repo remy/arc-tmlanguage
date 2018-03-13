@@ -1,0 +1,26 @@
+{
+    "name": "arc",
+    "displayName": "arc.codes",
+    "description": "arc.codes manifest",
+    "version": "0.0.1",
+    "publisher": "remysharp",
+    "engines": {
+        "vscode": "^1.21.0"
+    },
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "arc",
+            "aliases": ["arc manifest", "arc"],
+            "extensions": [".arc",".arc-env"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "arc",
+            "scopeName": "source.arc",
+            "path": "./syntaxes/arc.tmLanguage.json"
+        }]
+    }
+}

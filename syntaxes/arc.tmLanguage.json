@@ -1,0 +1,157 @@
+{
+  "$schema":
+    "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "arc manifest",
+  "patterns": [
+    {
+      "include": "#sections"
+    },
+    {
+      "include": "#comments"
+    }
+  ],
+  "repository": {
+    "sections": {
+      "patterns": [
+        { "include": "#app" },
+        { "include": "#html" },
+        { "include": "#section" },
+        { "include": "#tuple-of-values" },
+        { "include": "#partition-key" },
+        { "include": "#methods" },
+        { "include": "#bool" },
+        { "include": "#number" }
+      ]
+    },
+    "app": {
+      "begin": "@app",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.arc.section.app"
+        }
+      },
+      "end": "^$",
+      "patterns": [{ "include": "#app-name" }]
+    },
+    "app-name": {
+      "patterns": [
+        { "match": "^\\b\\S+\\b$", "name": "support.variable.arc.app-name" }
+      ]
+    },
+    "html": {
+      "begin": "(@html)([^@])+",
+      "end": "(?=^@)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.arc.section.html"
+        }
+      },
+      "name": "meta.block.arc.section.html",
+      "patterns": [{ "include": "#methods" }, { "include": "#comments" }]
+    },
+    "section": {
+      "patterns": [
+        {
+          "begin": "(@\\S+)([^@])+",
+          "end": "(?=^@)",
+          "name": "meta.block.arc.section",
+          "captures": {
+            "1": { "name": "keyword.control.arc.section.title" },
+            "2": { "name": "meta.block.arc.section.body" }
+          },
+          "patterns": [
+            { "include": "#bool" },
+            { "include": "#comments" },
+            { "include": "#number" },
+            { "include": "#map" },
+            { "include": "#vector" }
+          ]
+        }
+      ]
+    },
+    "map": {
+      "patterns": [
+        {
+          "begin": "^(?:([^#\\s]+))$",
+          "end": "^$",
+          "name": "meta.block.map.parent",
+          "patterns": [
+            {
+              "match": "^[[:blank:]]+([^#\\s]+) ([^#\\s]+)",
+              "name": "meta.block.map.child",
+              "captures": {
+                "1": { "name": "meta.block.map.child.key" },
+                "2": { "name": "meta.block.map.child.value" }
+              }
+            }
+          ]
+        },
+        { "include": "#sort-key" }
+      ]
+    },
+    "vector": {
+      "patterns": [
+        {
+          "match": "^(?:([^#\\s]+)) (?:([^#\\s]+) ?)+",
+          "name": "meta.vector.arc"
+        }
+      ]
+    },
+    "bool": {
+      "patterns": [
+        {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.arc.bool"
+        }
+      ]
+    },
+    "number": {
+      "patterns": [
+        {
+          "match": "\\b(\\d|\\.)\\b",
+          "name": "constant.language.arc.number"
+        }
+      ]
+    },
+    "sort-key": {
+      "patterns": [
+        {
+          "match": "(\\*\\*\\S+)\\b",
+          "name": "keyword.operator.arc.sort-key"
+        }
+      ]
+    },
+    "methods": {
+      "patterns": [
+        {
+          "match": "^\\b(get|post|put|delete|head)\\b",
+          "name": "entity.name.function.arc"
+        },
+        {
+          "include": "#url"
+        }
+      ]
+    },
+    "url": {
+      "patterns": [
+        {
+          "match": "/\\S+",
+          "name": "string.url.arc"
+        },
+        {
+          "match": "/",
+          "name": "string.url.arc"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "match": "#.*",
+          "name": "comment"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.arc"
+}
