@@ -39,7 +39,7 @@
       ]
     },
     "html": {
-      "begin": "(@html)([^@])+",
+      "begin": "(@(?:html|json))([^@])+",
       "end": "(?=^@)",
       "beginCaptures": {
         "1": {
@@ -66,34 +66,6 @@
             { "include": "#map" },
             { "include": "#vector" }
           ]
-        }
-      ]
-    },
-    "map": {
-      "patterns": [
-        {
-          "begin": "^(?:([^#\\s]+))$",
-          "end": "^$",
-          "name": "meta.block.map.parent",
-          "patterns": [
-            {
-              "match": "^[[:blank:]]+([^#\\s]+) ([^#\\s]+)",
-              "name": "meta.block.map.child",
-              "captures": {
-                "1": { "name": "meta.block.map.child.key" },
-                "2": { "name": "meta.block.map.child.value" }
-              }
-            }
-          ]
-        },
-        { "include": "#sort-key" }
-      ]
-    },
-    "vector": {
-      "patterns": [
-        {
-          "match": "^(?:([^#\\s]+)) (?:([^#\\s]+) ?)+",
-          "name": "meta.vector.arc"
         }
       ]
     },
@@ -141,6 +113,40 @@
         {
           "match": "/",
           "name": "string.url.arc"
+        }
+      ]
+    },
+    "map": {
+      "patterns": [
+        { "include": "#comments" },
+        {
+          "begin": "^([^@\\s]+)([[:blank:]]+#.*)?(?=(?:\\n[[:blank:]]))",
+          "end": "^$",
+          "name": "meta.block.arc.map",
+          "beginCaptures": {
+            "1": { "name": "entity.name.class" },
+            "2": { "name": "comment" }
+          },
+          "patterns": [
+            {
+              "match": "^[[:blank:]]+([^#\\s]+) ([^#\\s]+)",
+              "name": "meta.block.map.child",
+              "captures": {
+                "1": { "name": "entity.name.tag" },
+                "2": { "name": "string.unquoted" }
+              }
+            },
+            { "include": "#sort-key" },
+            { "include": "#comments" }
+          ]
+        }
+      ]
+    },
+    "vector": {
+      "patterns": [
+        {
+          "match": "^(?:([^#\\s]+)) (?:([^#\\s]+) ?)+",
+          "name": "meta.vector.arc"
         }
       ]
     },
